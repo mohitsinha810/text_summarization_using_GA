@@ -14,9 +14,11 @@ import nltk
 from nltk.util import ngrams
 
 from nltk.stem.snowball import SnowballStemmer
+
 stemmer = SnowballStemmer("english")
 
 from nltk.tokenize import RegexpTokenizer
+
 tokenizer = RegexpTokenizer(r'\w+')
 # class WordTokenizer(object):
 # 	"""docstring for WordTokenizer"""
@@ -27,45 +29,51 @@ tokenizer = RegexpTokenizer(r'\w+')
 # tokenizer =  WordTokenizer()
 
 
-
 from nltk.corpus import stopwords
+
 stopset = frozenset(stopwords.words('english'))
 
-# Convert an object to its unicode representation (if possible)
+
+#  Convert an object to its unicode representation (if possible)
 def to_unicode(object):
-	if isinstance(object, unicode):
-		return object
-	elif isinstance(object, bytes):
-		return object.decode("utf8")
-	else:
-		print str(object)
-		if PY3:
-			if hasattr(instance, "__str__"):
-				return unicode(instance)
-			elif hasattr(instance, "__bytes__"):
-				return bytes(instance).decode("utf8")
-		else:
-			if hasattr(instance, "__unicode__"):
-				return unicode(instance)
-			elif hasattr(instance, "__str__"):
-				return bytes(instance).decode("utf8")
+    if isinstance(object, unicode):
+        return object
+    elif isinstance(object, bytes):
+        return object.decode("utf8")
+    else:
+        print str(object)
+        if PY3:
+            if hasattr(instance, "__str__"):
+                return unicode(instance)
+            elif hasattr(instance, "__bytes__"):
+                return bytes(instance).decode("utf8")
+        else:
+            if hasattr(instance, "__unicode__"):
+                return unicode(instance)
+            elif hasattr(instance, "__str__"):
+                return bytes(instance).decode("utf8")
 
-# normalize and stem the word
+
+#  normalize and stem the word
 def stem_word(word):
-	return stemmer.stem(normalize_word(word))
+    return stemmer.stem(normalize_word(word))
 
-# convert to unicode and convert to lower case
+
+#  convert to unicode and convert to lower case
 def normalize_word(word):
-	return to_unicode(word).lower()
+    return to_unicode(word).lower()
 
-# convert the sentence to a list of tokens
+
+#  convert the sentence to a list of tokens
 def sentence_tokenizer(sentence):
-	return tokenizer.tokenize(sentence)
+    return tokenizer.tokenize(sentence)
+
 
 def get_len(element):
-	return len(tokenizer.tokenize(element))
+    return len(tokenizer.tokenize(element))
+
 
 def get_ngrams(sentence, N):
-	tokens = tokenizer.tokenize(sentence.lower())
-	clean = [stemmer.stem(token) for token in tokens]
-	return [gram for gram in ngrams(clean, N)]
+    tokens = tokenizer.tokenize(sentence.lower())
+    clean = [stemmer.stem(token) for token in tokens]
+    return [gram for gram in ngrams(clean, N)]
