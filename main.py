@@ -1,6 +1,6 @@
 from GeneticOptimizer import GeneticOptimizer
 from nltk.tokenize import sent_tokenize
-from Text import js_divergence, compute_tf, compute_tf_idf, fitness_fun
+from Text import compute_tf, fitness, generate_doc_tf_idf, generate_weight_matrix, compute_longest_path_weight
 
 sentences1 = []
 sentences2 = []
@@ -43,11 +43,11 @@ def GenAlgo(docs, length_max, epoch, population_size=1000):
         # sentences.append(title)
        # sentences.extend(doc)
 
-    doc_freq = compute_tf_idf(docs)
+    doc_tf_idf_matrix = generate_doc_tf_idf(docs)
 
-    gen_optimizer = GeneticOptimizer(fitness_fun=fitness_fun,
+    gen_optimizer = GeneticOptimizer(fitness_fun=fitness,
                                      docs=docs,
-                                     docs_representation=doc_freq,
+                                     docs_representation=doc_tf_idf_matrix,
                                      max_length=length_max,
                                      population_size=population_size,
                                      survival_rate=0.4,
@@ -60,11 +60,11 @@ def GenAlgo(docs, length_max, epoch, population_size=1000):
 
 if __name__ == '__main__':
     get_Data()
-    doc_1 = ("First", sentences1)
-    doc_2 = ("Second", sentences2)
-    doc_3 = ("Third", sentences3)
-    doc_4 = ("Fourth", sentences4)
-    doc_5 = ("Fifth", sentences5)
+    doc_1 = (sentences1[0], sentences1)
+    doc_2 = (sentences2[0], sentences2)
+    doc_3 = (sentences3[0], sentences3)
+    doc_4 = (sentences4[0], sentences4)
+    doc_5 = (sentences5[0], sentences5)
     docs = [doc_1, doc_2, doc_3, doc_4, doc_5]
 
     length_max = int(raw_input("Enter summary length: "))

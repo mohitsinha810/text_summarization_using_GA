@@ -2,6 +2,7 @@ import numpy as np
 import random
 from copy import deepcopy
 
+from Text import generate_weight_matrix, compute_longest_path_weight
 from greedy import greedy_optimizer
 
 from nltk.tokenize import RegexpTokenizer
@@ -23,11 +24,14 @@ class GeneticOptimizer(object):
         self._sentences_rep = sentences_rep
         self._max_length = max_length
 
+        self._docs_weights = generate_weight_matrix(self._docs_representation)
+        self._N = len(self._docs_representation)
+        self._M = max(self._docs_weights)
+        self._A = compute_longest_path_weight(self._docs_representation)
+
         self._sentences = []
         self._sentence_tokens = []
         for title, doc in docs:
-            self._sentences.append(title)
-            self._sentence_tokens.append(tokenizer.tokenize(title))
             self._sentences.extend(doc)
             for s in doc:
                 self._sentence_tokens.append(tokenizer.tokenize(s))
@@ -49,9 +53,9 @@ class GeneticOptimizer(object):
         for individual in population:
             # score = self._fitness_fun(individual, self._docs)
             if self._sentences_rep != None:
-                score = self._fitness_fun(individual, self._docs_representation, self._sentences_rep)
+                score = self._fitness_fun(individual, self._A, self._sentences_rep, self._docs, self._N, self._M)
             else:
-                score = self._fitness_fun(individual, self._docs_representation)
+                score = self._fitness_fun(individual, self._A, self._docs, self._N, self._M)
             scored_population.append((individual, score))
 
         return scored_population
